@@ -1,0 +1,4 @@
+name: Aurelia
+version: '${project.version}'
+main: io.skiftstar.aurelia.Aurelia
+api-version: '1.20'
