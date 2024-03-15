@@ -10,6 +10,8 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
+
+import io.skiftstar.aurelia.data.player.PlayerData;
 import io.skiftstar.aurelia.data.world.WorldData;
 import io.skiftstar.aurelia.util.Logger;
 import java.util.UUID;
@@ -45,9 +47,12 @@ public class WorldManager {
     );
     newWorld.setSpawnLocation(spawnLocation);
 
+    PlayerData data = PlayerData.getPlayerData(playerUUID);
+
     for (int x = -startArea; x <= startArea; x++) {
       for (int z = -startArea; z <= startArea; z++) {
         copyChunk(newWorld, x, z);
+        data.addClaimedChunk(newWorld.getChunkAt(x, z));
       }
     }
 
