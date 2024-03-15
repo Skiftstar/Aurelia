@@ -31,7 +31,7 @@ public class PlayerDataManager {
     }
   }
 
-  public static YamlConfiguration getPlayerData(final UUID uuid) {
+  static YamlConfiguration getPlayerData(final UUID uuid) {
     createDataFileIfNotExists(uuid);
 
     final File playersDirectory = new File(
@@ -46,7 +46,7 @@ public class PlayerDataManager {
     return YamlConfiguration.loadConfiguration(playersFile);
   }
 
-  public static void saveConfig(UUID uuid, YamlConfiguration config) {
+  static void saveConfig(UUID uuid, YamlConfiguration config) {
     createDataFileIfNotExists(uuid);
 
     final File playersDirectory = new File(

@@ -23,6 +23,11 @@ import org.bukkit.generator.ChunkGenerator;
 
 public class WorldManager {
 
+  /**
+   * Initializes a new world for the player with the given UUID
+   * @param playerUUID The UUID of the player
+   * @return The new world or null if the world could not be created
+   */
   public static World initWorld(UUID playerUUID) {
     final String worldName = WorldData.getTemplateWorldName();
     final int startArea = WorldData.getStartArea();
@@ -59,6 +64,12 @@ public class WorldManager {
     return newWorld;
   }
 
+  /**
+   * Copies a chunk from the template world to the given world
+   * @param to The world to copy the chunk to
+   * @param chunkX The x coordinate of the chunk
+   * @param chunkZ The z coordinate of the chunk
+   */
   public static void copyChunk(World to, int chunkX, int chunkZ) {
     final World from = Bukkit.getWorld(WorldData.getTemplateWorldName());
     final int x1 = chunkX * 16;
