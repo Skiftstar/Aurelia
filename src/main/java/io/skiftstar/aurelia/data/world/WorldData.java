@@ -10,6 +10,7 @@ import org.bukkit.Location;
 public class WorldData {
 
   private static ConfigManager worldConfigManager = new ConfigManager(
+    ConfigManager.CONFIG_DIRECTORY,
     "world.yml"
   );
   private static int startArea = 0; // Radius of the start area

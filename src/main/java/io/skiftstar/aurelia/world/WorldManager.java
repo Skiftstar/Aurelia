@@ -29,6 +29,8 @@ public class WorldManager {
    * @return The new world or null if the world could not be created
    */
   public static World initWorld(UUID playerUUID) {
+    Logger.log("Initializing World for " + playerUUID.toString());
+
     final String worldName = WorldData.getTemplateWorldName();
     final int startArea = WorldData.getStartArea();
 
@@ -123,5 +125,34 @@ public class WorldManager {
       Logger.error("Could not paste chunk " + chunkX + " " + chunkZ);
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Unloads the world of the player with the given UUID
+   * @param playerUUID The UUID of the player
+   */
+  public static void unloadWorld(UUID playerUUID) {
+    final World world = Bukkit.getWorld(playerUUID.toString());
+    if (world == null) {
+      Logger.error("Could'nt Unload World for player with UUID " + playerUUID);
+      return;
+    }
+    Bukkit.unloadWorld(world, true);
+  }
+
+  /**
+   * Loads the world of the player with the given UUID
+   * @param playerUUID The UUID of the player
+   * @return The world of the player or null if the world could not be loaded
+   */
+  public static World loadWorld(UUID playerUUID) {
+    final String worldName = playerUUID.toString();
+    new WorldCreator(worldName).createWorld();
+    final World world = Bukkit.getWorld(worldName);
+    if (world == null) {
+      Logger.error("Could not find the world of the player with UUID " + playerUUID);
+      return null;
+    }
+    return world;
   }
 }
