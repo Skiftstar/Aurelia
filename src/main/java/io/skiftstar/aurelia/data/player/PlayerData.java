@@ -1,13 +1,16 @@
 package io.skiftstar.aurelia.data.player;
 
 import io.skiftstar.aurelia.data.chunk.ChunkKey;
+import io.skiftstar.aurelia.data.config.ConfigManager;
+import io.skiftstar.aurelia.util.Logger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Chunk;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.Location;
 
 public class PlayerData {
 
@@ -16,6 +19,8 @@ public class PlayerData {
   private UUID uuid;
   private final List<String> claimedChunks = new ArrayList<>();
   private boolean hasWorld = false;
+  private Location lastLocationInWorld = null;
+  private ConfigManager configManager = null;
 
   /**
    * Get the PlayerData for the player with the given UUID
@@ -31,13 +36,22 @@ public class PlayerData {
     return data;
   }
 
-  private PlayerData(UUID uuid) {
+  private PlayerData(UUID uuid) {    
     this.uuid = uuid;
-    YamlConfiguration playerData = PlayerDataManager.getPlayerData(uuid);
-    if (playerData.contains("claimedChunks")) {
-      claimedChunks.addAll(playerData.getStringList("claimedChunks"));
+
+    Logger.log("Getting PlayerData for " + uuid.toString());
+
+    configManager =
+      new ConfigManager(
+        ConfigManager.PLAYER_DIRECTORY,
+        uuid.toString() + ".yml"
+      );
+    if (configManager.contains("claimedChunks")) {
+      claimedChunks.addAll(configManager.getStringList("claimedChunks"));
     }
-    hasWorld = playerData.getBoolean("hasWorld", false);
+    hasWorld = configManager.getBoolean("hasWorld", false);
+    lastLocationInWorld =
+      configManager.getLocation("lastLocationInWorld", null);
   }
 
   /**
@@ -72,12 +86,27 @@ public class PlayerData {
   }
 
   /**
+   * Set the last location the player was in the world
+   * @param lastLocationInWorld The last location the player was in the world
+   */
+  public void setLastLocationInWorld(Location lastLocationInWorld) {
+    this.lastLocationInWorld = lastLocationInWorld;
+  }
+
+  /**
+   * @return The last location the player was in the world
+   */
+  public Location getLastLocationInWorld() {
+    return lastLocationInWorld;
+  }
+
+  /**
    * Save the player's data to the config
    */
   public void save() {
-    YamlConfiguration playerData = PlayerDataManager.getPlayerData(uuid);
-    playerData.set("claimedChunks", claimedChunks);
-    playerData.set("hasWorld", hasWorld);
-    PlayerDataManager.saveConfig(uuid, playerData);
+    configManager.set("claimedChunks", claimedChunks);
+    configManager.set("hasWorld", hasWorld);
+    configManager.setLocation("lastLocationInWorld", lastLocationInWorld);
+    configManager.save();
   }
 }
