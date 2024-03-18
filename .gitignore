@@ -1,10 +1,6 @@
-Testing
-
 # User-specific stuff
 .idea/
 .editorconfig
-
-Testing/
 
 *.iml
 *.ipr
