@@ -77,6 +77,16 @@ public class PlayerData {
   }
 
   /**
+   * Check if the player has claimed the given chunk
+   * @param chunk The chunk to check
+   * @return Whether the player has claimed the chunk
+   */
+  public boolean hasClaimedChunk(Chunk chunk) {
+    final String chunkKey = ChunkKey.buildKey(chunk.getX(), chunk.getZ());
+    return claimedChunks.contains(chunkKey);
+  }
+
+  /**
    * Add a claimed chunk to the player's data
    * @param chunk The chunk to add
    */
@@ -98,6 +108,13 @@ public class PlayerData {
    */
   public Location getLastLocationInWorld() {
     return lastLocationInWorld;
+  }
+
+  /**
+   * @return The UUID of the player
+   */
+  public UUID getUUID() {
+      return uuid;
   }
 
   /**
